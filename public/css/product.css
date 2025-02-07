@@ -1,0 +1,11 @@
+table{
+    border:  1px solid grey;
+}
+img{
+    height: 8rem;
+    width: 6rem;
+}
+
+i{
+    font-size: 1.5rem;
+}

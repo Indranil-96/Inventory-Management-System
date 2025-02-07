@@ -1,0 +1,5 @@
+.stl{
+    box-shadow: 10px 10px 5px 0px rgba(249,129,129,0.75);
+-webkit-box-shadow: 10px 10px 5px 0px rgba(249,129,129,0.75);
+-moz-box-shadow: 10px 10px 5px 0px rgba(249,129,129,0.75);
+}
