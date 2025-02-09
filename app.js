@@ -7,13 +7,14 @@ import DataBase from './models/db.js';
 import validationMiddleware from './middleware/validation.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { UploadFile } from './middleware/fileUpload.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 // Destructuring data
-const port=process.env.port;
+const port=process.env.port || 3300;
 
 
 // Accuring express in our app
@@ -37,7 +38,7 @@ app.get('/new', (req,res)=>{
     res.render('addproduct', {errormessage:null});
 })
 
-app.post('/',validationMiddleware,(req,res)=>{
+app.post('/',UploadFile.single('url'),validationMiddleware,(req,res)=>{
     const {name,des,url}= req.body; // destructure data from request...
 
 // Adding data to database....

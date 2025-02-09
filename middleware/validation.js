@@ -3,7 +3,7 @@
     //Setup rules for validation...
     const rules=[
         body('name').notEmpty().withMessage('Name Can not be empty'),
-        body('url').isURL().withMessage('Invalid URL')
+        // body('url').isURL().withMessage('Invalid URL')
     ]
 
     // Running the rule....
