@@ -8,6 +8,8 @@ import validationMiddleware from './middleware/validation.js';
 import { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { UploadFile } from './middleware/fileUpload.js';
+import UserDB from './models/user-db.js';
+import session from 'express-session';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -25,7 +27,8 @@ app.set('view engine', 'ejs'); // setting viewengine
 app.set(path.join(__dirname, 'views')); // setting view path
 app.use(express.static('views')); // seting static file path of view
 app.use(express.urlencoded({extended:true})); // To parse form data
-app.use(express.static('public'))// Statically exposed the public folder to our app .
+app.use(express.static(path.join(__dirname, 'public')))// Statically exposed the public folder to our app .
+app.use(session({}))
 
 
 //Routing methods....
@@ -39,8 +42,8 @@ app.get('/new', (req,res)=>{
 })
 
 app.post('/',UploadFile.single('url'),validationMiddleware,(req,res)=>{
-    const {name,des,url}= req.body; // destructure data from request...
-
+    const {name,des}= req.body; // destructure data from request...
+    const url= "/images"+ req.file.filename;
 // Adding data to database....
     DataBase.addData(name, des ,url);
     const collections=DataBase.getdata(); 
@@ -72,6 +75,32 @@ app.post('/delete/:id',(req,res)=>{
     const collections=DataBase.getdata();
     res.render('product',{collections})
 })
+
+app.get('/register',(req,res)=>{
+    res.render('register');
+});
+
+app.post('/register', (req,res)=>{
+    const {name, email, password}= req.body;
+    UserDB.addUser(name,email,password);
+    res.redirect('/login');
+})
+
+app.get('/login',(req,res)=>{
+    res.render('login',{errormessage:null});
+});
+
+app.post('/login',(req,res)=>{
+    const {email, password}= req.body;
+    const userauth=UserDB.isValidUser(email, password);
+
+    if(!userauth){
+        return res.render('login',{errormessage:"Invalid credintial"});
+    }
+    const collections=DataBase.getdata();
+    return res.render('product',{collections});
+});
+
 
 
 // Listining server to the port.....

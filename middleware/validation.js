@@ -3,8 +3,13 @@
     //Setup rules for validation...
     const rules=[
         body('name').notEmpty().withMessage('Name Can not be empty'),
-        // body('url').isURL().withMessage('Invalid URL')
-    ]
+        body('url').custom((value, {req}) =>{
+            if(!req.file){
+                throw new Error ('Image is required');
+            }
+            return true;
+        })
+    ];
 
     // Running the rule....
     await Promise.all(
