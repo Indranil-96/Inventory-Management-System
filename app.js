@@ -123,6 +123,7 @@ app.get('/logout',(req,res)=>{
         }else{
             res.redirect('/login');
         }
+        res.clearCookie('lastvisit'); // deleting or clearing cookies..
     })
 });
 
